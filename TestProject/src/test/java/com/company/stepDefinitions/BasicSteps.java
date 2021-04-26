@@ -33,13 +33,8 @@ public class BasicSteps extends Base {
     @SneakyThrows
     @Тогда("выбрать элемент {string} из коллекции {string} на странице {string}")
     public void elementsCollectionAreVisible(String element, String collectionName, String pageName) {
-        getElementCollection(pageName, collectionName).filter(Condition.text(element)).first().click(ClickOptions.usingDefaultMethod());
-    }
-
-
-    @И("на текущей странице нажать на кнопку/ссылку {string}")
-    public void clickBtnSetApplication(String elementName) {
-        getElement(elementName).click();
+        getElementCollection(pageName, collectionName).filter(Condition.text(element)).first()
+                .click(ClickOptions.usingDefaultMethod());
     }
 
     @Тогда("на текущей странице проверить, что отображается {string}")
@@ -47,18 +42,6 @@ public class BasicSteps extends Base {
         getElement(elementName).shouldBe(Condition.visible, Duration.ofSeconds(5));
     }
 
-    @И("на текущей странице пользователь нажимает на чекбокс {string}")
-    public void chooseCheckbox(String checkboxName) {
-        try {
-            SelenideElement element = getElement(checkboxName);
-            if (!element.isSelected()) {
-                element.click();
-            }
-        } catch (Exception e) {
-            e.printStackTrace();
-            log.error(lastInitClass.getName());
-        }
-    }
 
     @И("на текущей странице пользователь выбирает радиобаттон типа {string}")
     public void chooseRadio(String radioName) {
