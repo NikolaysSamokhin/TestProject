@@ -30,11 +30,15 @@ public class BasicSteps extends Base {
         }
     }
 
-    @SneakyThrows
     @Тогда("выбрать элемент {string} из коллекции {string} на странице {string}")
     public void elementsCollectionAreVisible(String element, String collectionName, String pageName) {
         getElementCollection(pageName, collectionName).filter(Condition.text(element)).first()
                 .click(ClickOptions.usingDefaultMethod());
+    }
+
+    @Тогда("переключиться на вкладку {int}")
+    public void switchTabBrowser(int tabNumber) {
+        switchTab(tabNumber);
     }
 
     @Тогда("на текущей странице проверить, что отображается {string}")
@@ -42,13 +46,19 @@ public class BasicSteps extends Base {
         getElement(elementName).shouldBe(Condition.visible, Duration.ofSeconds(5));
     }
 
-
     @И("на текущей странице пользователь выбирает радиобаттон типа {string}")
     public void chooseRadio(String radioName) {
         SelenideElement element = getElement(radioName);
         if (!element.isSelected()) {
             element.click();
         }
+    }
+
+    @SneakyThrows
+    @Тогда("отображается страница {string}")
+    public void allElementsAreVisible(String pageName) {
+        initPage(pageName);
+        lastInitClass.getMethod("pageIsDisplayed", null).invoke(lastInitClass.newInstance());
     }
 
 }

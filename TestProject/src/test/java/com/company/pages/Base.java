@@ -1,9 +1,6 @@
 package com.company.pages;
 
-import com.codeborne.selenide.Condition;
-import com.codeborne.selenide.Configuration;
-import com.codeborne.selenide.ElementsCollection;
-import com.codeborne.selenide.SelenideElement;
+import com.codeborne.selenide.*;
 import com.company.annotations.ElementTitle;
 import com.company.annotations.PageTitle;
 import lombok.SneakyThrows;
@@ -11,6 +8,8 @@ import lombok.extern.log4j.Log4j;
 import org.reflections.Reflections;
 
 import java.lang.reflect.Field;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Set;
 
 import static com.codeborne.selenide.Condition.*;
@@ -58,8 +57,6 @@ public abstract class Base {
         }
     }
 
-
-    @SneakyThrows
     public void initPage(String pageName) {
         Set<Class<?>> annotated = new Reflections("com/company/pages").getTypesAnnotatedWith(PageTitle.class);
         lastInitClass = annotated.stream().filter(clazz -> clazz.getAnnotation(PageTitle.class)
@@ -73,11 +70,18 @@ public abstract class Base {
     }
 
     public static void allElementsAreVisible(ElementsCollection elements) {
-
         elements.forEach(selenideElement -> selenideElement.shouldBe(visible));
     }
 
-    @SneakyThrows
+    public static void allElementsAreVisible(List<SelenideElement> elements) {
+        elements.forEach(selenideElement -> selenideElement.shouldBe(visible));
+    }
+
+    public static void switchTab(int tab) {
+        List<String> tabs = new ArrayList<>(WebDriverRunner.getWebDriver().getWindowHandles());
+        WebDriverRunner.getWebDriver().switchTo().window(tabs.get(tab));
+    }
+
     public SelenideElement getElement(String elementName) {
         Object elementByTitle = findElementByTitle(elementName);
         if (elementByTitle instanceof SelenideElement)
