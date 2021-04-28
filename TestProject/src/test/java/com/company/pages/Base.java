@@ -4,7 +4,6 @@ import com.codeborne.selenide.*;
 import com.company.annotations.ElementTitle;
 import com.company.annotations.PageTitle;
 import lombok.SneakyThrows;
-import lombok.extern.log4j.Log4j;
 import org.reflections.Reflections;
 
 import java.lang.reflect.Field;
@@ -16,7 +15,6 @@ import static com.codeborne.selenide.Condition.*;
 import static com.codeborne.selenide.Selenide.page;
 import static org.apache.commons.lang3.StringUtils.substringAfter;
 
-@Log4j
 public abstract class Base {
 
     private static final Condition clickable = and("can be clicked", visible, enabled);
@@ -29,6 +27,7 @@ public abstract class Base {
 
     public Object lastInitialized;
     public Class<?> lastInitClass;
+
     @SneakyThrows
     private Object findElementByTitle(String elementName) {
         Field[] annotated = lastInitClass.getDeclaredFields();
@@ -41,18 +40,17 @@ public abstract class Base {
             }
         }
 
-        log.error("Не найден элемент с именем: " + elementName);
+        System.out.println("Не найден элемент с именем: " + elementName);
         return null;
     }
 
     @SneakyThrows
-    public ElementsCollection getElementCollection(String pageName, String elementName) {
-        initPage(pageName);
+    public ElementsCollection getElementCollection(String elementName) {
         Object elementByTitle = findElementByTitle(elementName);
         if (elementByTitle instanceof ElementsCollection)
             return (ElementsCollection) elementByTitle;
         else {
-            log.error("Элемент не является ElementsCollection");
+            System.out.println("Элемент не является ElementsCollection");
             return null;
         }
     }
@@ -77,6 +75,11 @@ public abstract class Base {
         elements.forEach(selenideElement -> selenideElement.shouldBe(visible));
     }
 
+    public void pageIsDisplayed() {
+    }
+
+    ;
+
     public static void switchTab(int tab) {
         List<String> tabs = new ArrayList<>(WebDriverRunner.getWebDriver().getWindowHandles());
         WebDriverRunner.getWebDriver().switchTo().window(tabs.get(tab));
@@ -87,10 +90,9 @@ public abstract class Base {
         if (elementByTitle instanceof SelenideElement)
             return (SelenideElement) elementByTitle;
         else {
-            log.error("Элемент не является SelenideElement");
+            System.out.println("Элемент не является SelenideElement");
             return null;
         }
     }
-
 
 }

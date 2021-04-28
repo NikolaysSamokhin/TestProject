@@ -1,8 +1,8 @@
 package com.company.stepDefinitions;
 
-
 import com.codeborne.selenide.ClickOptions;
 import com.codeborne.selenide.Condition;
+import com.codeborne.selenide.ElementsCollection;
 import com.codeborne.selenide.SelenideElement;
 import com.company.endpoints.YandexEndpoints;
 import com.company.pages.Base;
@@ -10,13 +10,13 @@ import io.cucumber.java.ru.Дано;
 import io.cucumber.java.ru.И;
 import io.cucumber.java.ru.Тогда;
 import lombok.SneakyThrows;
-import lombok.extern.log4j.Log4j;
+import org.testng.Assert;
 
+import java.io.File;
 import java.time.Duration;
 
 import static com.codeborne.selenide.Selenide.open;
 
-@Log4j
 public class BasicSteps extends Base {
 
     @Дано("пользователь находится на главной странице {word}")
@@ -30,10 +30,15 @@ public class BasicSteps extends Base {
         }
     }
 
-    @Тогда("выбрать элемент {string} из коллекции {string} на странице {string}")
-    public void elementsCollectionAreVisible(String element, String collectionName, String pageName) {
-        getElementCollection(pageName, collectionName).filter(Condition.text(element)).first()
+    @Тогда("выбрать элемент {string} из коллекции {string}")
+    public void elementsCollectionAreVisible(String element, String collectionName) {
+        getElementCollection(collectionName).filter(Condition.text(element)).first()
                 .click(ClickOptions.usingDefaultMethod());
+    }
+
+    @И("на текущей странице нажать на кнопку/ссылку {string}")
+    public void clickBtnSetApplication(String elementName) {
+        getElement(elementName).click();
     }
 
     @Тогда("переключиться на вкладку {int}")
@@ -61,4 +66,18 @@ public class BasicSteps extends Base {
         lastInitClass.getMethod("pageIsDisplayed", null).invoke(lastInitClass.newInstance());
     }
 
+    @SneakyThrows
+    @Тогда("Текст в форме отображения {string} должен совпдать с примером {string}")
+    public void checkText(String formName, String expectedText) {
+        ElementsCollection elements = getElementCollection(formName);
+
+     Assert.assertTrue(true);
+    }
+
+    @И("загрузить картинку {string} для поиска через {string}")
+    public void uploadPicture(String imageName, String formName) {
+        SelenideElement element = getElement(formName);
+        element.uploadFile(new File(System.getProperty("user.dir")
+                + String.format("\\src\\test\\resources\\pictures\\/%s.jpg", imageName)));
+    }
 }

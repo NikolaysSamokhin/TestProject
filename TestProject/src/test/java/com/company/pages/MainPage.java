@@ -4,12 +4,9 @@ import com.codeborne.selenide.ElementsCollection;
 import com.codeborne.selenide.SelenideElement;
 import com.company.annotations.ElementTitle;
 import com.company.annotations.PageTitle;
-import lombok.extern.log4j.Log4j;
 
-import static com.codeborne.selenide.Condition.text;
 import static com.codeborne.selenide.Selenide.$x;
 
-@Log4j
 @PageTitle("Главная_страница_Яндекса")
 public class MainPage extends Base {
 
@@ -18,12 +15,9 @@ public class MainPage extends Base {
     @ElementTitle("Список сервисов")
     private final ElementsCollection serviceElements = serviceBlock.$$x(".//li");
 
+    @Override
     public void pageIsDisplayed() {
      allElementsAreVisible(serviceElements);
-    }
-
-    public void clickOnService(String serviceName) {
-        serviceElements.filterBy(text(serviceName));
     }
 
 }
