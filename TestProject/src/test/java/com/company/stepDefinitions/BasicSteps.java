@@ -10,12 +10,14 @@ import io.cucumber.java.ru.Дано;
 import io.cucumber.java.ru.И;
 import io.cucumber.java.ru.Тогда;
 import lombok.SneakyThrows;
-import org.testng.Assert;
 
 import java.io.File;
 import java.time.Duration;
+import java.util.List;
+import java.util.stream.Collectors;
 
 import static com.codeborne.selenide.Selenide.open;
+import static org.assertj.core.api.Assertions.assertThat;
 
 public class BasicSteps extends Base {
 
@@ -70,8 +72,9 @@ public class BasicSteps extends Base {
     @Тогда("Текст в форме отображения {string} должен совпдать с примером {string}")
     public void checkText(String formName, String expectedText) {
         ElementsCollection elements = getElementCollection(formName);
+        List<String> list = elements.stream().map(x -> x.text()).collect(Collectors.toList());
 
-     Assert.assertTrue(true);
+        assertThat(list.get(0)).isEqualTo(expectedText);
     }
 
     @И("загрузить картинку {string} для поиска через {string}")
