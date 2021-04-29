@@ -1,5 +1,6 @@
 package com.company.hooks;
 
+import com.codeborne.selenide.WebDriverRunner;
 import com.company.utils.Driver;
 import io.cucumber.java.After;
 import io.cucumber.java.Before;
@@ -20,6 +21,6 @@ public class Hooks {
 
     @After
     public void tearDown() {
-
+        WebDriverRunner.driver().close();
     }
 }

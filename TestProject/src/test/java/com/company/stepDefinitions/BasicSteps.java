@@ -12,7 +12,6 @@ import io.cucumber.java.ru.Тогда;
 import lombok.SneakyThrows;
 
 import java.io.File;
-import java.time.Duration;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -48,11 +47,6 @@ public class BasicSteps extends Base {
         switchTab(tabNumber);
     }
 
-    @Тогда("на текущей странице проверить, что отображается {string}")
-    public void checkVisibleBlock(String elementName) {
-        getElement(elementName).shouldBe(Condition.visible, Duration.ofSeconds(5));
-    }
-
     @И("на текущей странице пользователь выбирает радиобаттон типа {string}")
     public void chooseRadio(String radioName) {
         SelenideElement element = getElement(radioName);
@@ -74,7 +68,7 @@ public class BasicSteps extends Base {
         ElementsCollection elements = getElementCollection(formName);
         List<String> list = elements.stream().map(x -> x.text()).collect(Collectors.toList());
 
-        assertThat(list.get(0)).isEqualTo(expectedText);
+        assertThat(list).containsAnyOf(expectedText);
     }
 
     @И("загрузить картинку {string} для поиска через {string}")
